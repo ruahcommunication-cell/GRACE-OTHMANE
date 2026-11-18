@@ -1,8 +1,8 @@
-# graceothmane.com — Migration Framer → Astro/Netlify Implementation Plan
+# graceothmane.fr — Migration Framer → Astro/Netlify Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans (native). Steps use checkbox (`- [ ]`) syntax.
 
-**Goal:** Reproduire à l'identique le site Framer « GRACE OTHMANE » en site Astro statique sur Netlify (graceothmane.com), avec admin Decap CMS.
+**Goal:** Reproduire à l'identique le site Framer « GRACE OTHMANE » en site Astro statique sur Netlify (graceothmane.fr), avec admin Decap CMS.
 
 **Architecture:** Astro (sortie statique), les pages lisent des collections de contenu (`src/content/*`). Les 9 composants code Framer sont portés en îlots React. Le contenu est éditable par Decap (`public/admin`, backend GitHub) et par Claude.
 
@@ -59,5 +59,5 @@
 
 ### Task 6: Déploiement
 - [ ] Push sur `ruahcommunication-cell/grace-othmane`, site Netlify connecté, notifications de formulaires vers ruahcommunication@gmail.com.
-- [ ] DNS OVH → Netlify, HTTPS, domaine graceothmane.com.
+- [ ] DNS OVH → Netlify, HTTPS, domaine graceothmane.fr.
 - [ ] Vérif finale : site en ligne, formulaires reçus, `/admin` connecté.

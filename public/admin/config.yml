@@ -1,4 +1,4 @@
-# Espace admin de graceothmane.com (Decap CMS)
+# Espace admin de graceothmane.fr (Decap CMS)
 backend:
   name: github
   repo: ruahcommunication-cell/grace-othmane
@@ -11,8 +11,8 @@ backend:
     deleteMedia: "Admin : suppression du fichier {{path}}"
 
 locale: fr
-site_url: https://graceothmane.com
-display_url: https://graceothmane.com
+site_url: https://graceothmane.fr
+display_url: https://graceothmane.fr
 logo_url: https://framerusercontent.com/images/gzm1PzlIY3gBhQJzjlUplDkB3IM.png
 media_folder: public/assets/uploads
 public_folder: /assets/uploads

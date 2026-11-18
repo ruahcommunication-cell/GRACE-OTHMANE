@@ -1,7 +1,7 @@
-# graceothmane.com — Design (18/11/2026)
+# graceothmane.fr — Design (18/11/2026)
 
 ## Intention
-Quitter Framer, dont l'hébergement est trop limité, sans rien perdre : reproduire **exactement** le portfolio Framer « GRACE OTHMANE » (projet pCma6D2z9Srbox6uHg6j) en site codé, hébergé gratuitement sur Netlify, sous le domaine **graceothmane.com**.
+Quitter Framer, dont l'hébergement est trop limité, sans rien perdre : reproduire **exactement** le portfolio Framer « GRACE OTHMANE » (projet pCma6D2z9Srbox6uHg6j) en site codé, hébergé gratuitement sur Netlify, sous le domaine **graceothmane.fr**.
 
 ## Objectifs
 - Rendu identique au site Framer : pages, textes, images, couleurs, polices, animations, mode clair (ivoire) / sombre, mascotte + assistant vocal ElevenLabs.
@@ -34,7 +34,7 @@ Quitter Framer, dont l'hébergement est trop limité, sans rien perdre : reprodu
 
 ## Ce que Grace doit faire
 - Créer un compte GitHub et un compte Netlify (gratuits).
-- Acheter graceothmane.com (~12–15 €/an).
+- Acheter graceothmane.fr (~12–15 €/an).
 - Garder le site Framer en ligne jusqu'à validation du nouveau site.
 
 ## Laissé au constructeur
