@@ -65,7 +65,7 @@ const isCurrent = (h: string) => path === h || (h === "/work" && path.startsWith
     .navlink { color: var(--mid); transition: color .3s var(--ease); }
     .navlink:hover, .navlink.current { color: var(--high); }
     .menu-btn { display: none; width: 40px; height: 40px; align-items: center; justify-content: center; background: none; border: 0; padding: 0; cursor: pointer; color: var(--high); }
-    .i-close { display: none; }
+    :global(.i-close) { display: none; }
     .drawer { display: none; width: 100%; flex-direction: column; align-items: flex-start; gap: 18px; padding: 16px 0 32px; }
     .drawer .navlink { color: var(--mid); }
     .spacer { height: 16px; width: 100%; }
@@ -79,7 +79,7 @@ const isCurrent = (h: string) => path === h || (h === "/work" && path.startsWith
         .drawer { display: flex; }
         .nav.open { max-height: 100vh; min-height: 100vh; background: var(--bg); }
         .nav.open .drawer { padding: 24px 0 28px; }
-        .nav.open .i-open { display: none; }
-        .nav.open .i-close { display: block; }
+        .nav.open :global(.i-open) { display: none; }
+        .nav.open :global(.i-close) { display: block; }
     }
 </style>

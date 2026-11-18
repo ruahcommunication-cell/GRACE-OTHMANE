@@ -8,7 +8,7 @@ let i = 0
 ---
 <Tag class:list={["split", cls]} aria-label={text} style={`--sy:${y}px;--sb:${blur}px;--sd:${dur}s`}>
     {words.map((w, wi) => (
-        <span class="w" aria-hidden="true">{[...w].map((ch) => <span class="ch" style={`animation-delay:${(delay + step * i++).toFixed(3)}s`}>{ch}</span>)}{wi < words.length - 1 && " "}</span>
+        <Fragment><span class="w" aria-hidden="true">{[...w].map((ch) => <span class="ch" style={`animation-delay:${(delay + step * i++).toFixed(3)}s`}>{ch}</span>)}</span>{wi < words.length - 1 && " "}</Fragment>
     ))}
 </Tag>
 <style>

@@ -55,10 +55,6 @@ const favicon = fx("ZEPLnSfhhDwNGlDFdOsohTqUo8w.png")
     <Footer compact={compactFooter} />
     <SmoothScroll client:load transition:persist="smooth-scroll" smoothness={7} wheelSpeed={1} />
     <Mascotte />
-    <div transition:persist="eleven">
-        <Fragment set:html={`<elevenlabs-convai agent-id="agent_0901m7mtrw35fbns35zjprj5x8nz"></elevenlabs-convai>`} />
-    </div>
-    <script is:inline src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
     <script>
         import { appear } from "../fx/native"
         document.addEventListener("astro:page-load", appear)
