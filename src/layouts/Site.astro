@@ -39,12 +39,28 @@ const ogImage = new URL(fx(image), Astro.site).toString()
     <meta property="og:image" content={ogImage} />
     <meta property="og:url" content={canonical} />
     <meta name="twitter:card" content="summary_large_image" />
+
     <meta name="theme-color" content="#07080A" />
 
     <!-- Thème ivoire (code personnalisé Framer « Thème ivoire ») -->
     <style is:inline id="ruah-theme">html.ruah-ivory body{--token-b4f7ec45-478a-49ed-b81e-ab6f2a1e1c40:rgb(245, 239, 227)!important;--token-343bc8fb-04d8-40cf-bee9-adcaa7991c80:rgb(236, 228, 212)!important;--token-c26605d3-137e-4442-b34f-8804fe3610bf:rgb(226, 217, 199)!important;--token-4da91ebd-ad7a-4e50-88bb-b5f32fbea86b:rgba(28, 24, 20, 0.12)!important;--token-9e2d5be3-8cb5-49d8-843d-98803219d637:rgba(28, 24, 20, 0.26)!important;--token-35c01d6b-956d-4bc8-95a3-ba7e8b6ab2c0:rgb(28, 24, 20)!important;--token-292e2ce1-8598-465c-9cc8-2376d33afe4a:rgba(28, 24, 20, 0.68)!important;--token-e2034c53-d6c4-4ca5-b6e0-383bd1b43573:rgba(28, 24, 20, 0.52)!important;--token-64ed0298-3d29-4030-bb65-914b61b9b2de:rgb(232, 80, 26)!important;--token-5b935389-2803-4e96-a6f9-09a3c91dd159:rgb(245, 239, 227)!important;--token-2a29a7fb-1137-4b1a-b28a-63453be4a6be:rgb(16, 118, 210)!important;--token-NdJY6ZFAr:rgba(245, 239, 227, 0.84)!important;--token-LVOtUnFo5:rgba(28, 24, 20, 0.3)!important;}html.ruah-ivory,html.ruah-ivory body{background:rgb(245,239,227);color-scheme:light}html.ruah-theme-anim body,html.ruah-theme-anim body *{transition:background-color .45s ease,color .45s ease,border-color .45s ease,fill .45s ease,stroke .45s ease!important}</style>
-    <script is:inline>try{if(localStorage.getItem("ruah-theme")==="ivory")document.documentElement.classList.add("ruah-ivory")}catch(e){}</script>
-    <script is:inline>document.addEventListener("astro:after-swap",()=>{try{document.documentElement.classList.toggle("ruah-ivory",localStorage.getItem("ruah-theme")==="ivory")}catch(e){}})</script>
+    <script is:inline>
+        // Thème ivoire mémorisé + couleur des barres du navigateur (Safari iPhone, Chrome Android) assortie au thème
+        (function () {
+            var root = document.documentElement
+            var sync = function () {
+                var c = root.classList.contains("ruah-ivory") ? "#F5EFE3" : "#07080A"
+                document.querySelectorAll('meta[name="theme-color"]').forEach(function (m) { m.setAttribute("content", c) })
+            }
+            var apply = function () {
+                try { root.classList.toggle("ruah-ivory", localStorage.getItem("ruah-theme") === "ivory") } catch (e) {}
+                sync()
+            }
+            apply()
+            window.addEventListener("ruah-theme", sync)
+            document.addEventListener("astro:after-swap", apply)
+        })()
+    </script>
     <ClientRouter fallback="swap" />
 </head>
 <body>
