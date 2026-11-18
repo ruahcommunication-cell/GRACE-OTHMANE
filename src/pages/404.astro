@@ -1,0 +1,19 @@
+---
+import Site from "../layouts/Site.astro"
+import ArrowLink from "../components/ArrowLink.astro"
+---
+<Site title="Page introuvable — Grace Othmane | ruah studio" description="Cette page a été déplacée ou n’existe plus. Retournez aux projets ou contactez-moi." noindex>
+    <section class="nf">
+        <div class="inner">
+            <h1 class="t-display">Cette page est introuvable.</h1>
+            <p class="t-lead lede">Le lien est peut-être ancien, ou la page a été déplacée. Tout le reste du site est à un clic.</p>
+            <ArrowLink href="/" label="Retour à l’accueil" />
+        </div>
+    </section>
+</Site>
+<style>
+    .nf { width: 100%; max-width: 1600px; margin: 0 auto; padding: 160px var(--gutter) 200px; }
+    .inner { display: flex; flex-direction: column; align-items: flex-start; gap: 36px; }
+    .t-display { max-width: 1000px; }
+    .lede { max-width: 560px; }
+</style>

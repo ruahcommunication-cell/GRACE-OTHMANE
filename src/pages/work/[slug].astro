@@ -1,0 +1,129 @@
+---
+import Site from "../../layouts/Site.astro"
+import SplitTitle from "../../components/SplitTitle.astro"
+import HoloImage from "../../fx/HoloImage"
+import { getProjects } from "../../lib/projects"
+import { fx } from "../../lib/asset"
+
+export async function getStaticPaths() {
+    const projects = await getProjects()
+    return projects.map((p, i) => ({ params: { slug: p.id }, props: { project: p, next: projects[i + 1] ?? null } }))
+}
+const { project, next } = Astro.props
+const d = project.data
+const paragraphs = d.overview.split(/\n{2,}/).map((s) => s.trim()).filter(Boolean)
+const holo = { accent: undefined, colorAtRest: true, zoom: true }
+---
+<Site title={`${d.title} — Grace Othmane | ruah studio`} description={d.summary} image={d.cover}>
+    <header class="ch wrap2">
+        <div class="top"><a class="t-label back" href="/work">← Tous les projets</a><p class="t-label accent">Dossier {d.fileNo}</p></div>
+        <SplitTitle text={d.title} class="t-display ttl" y={50} blur={10} dur={0.9} step={0.03} delay={0.05} />
+        <p class="t-label accent">{d.discipline}</p>
+        <div class="intro">
+            <p class="t-lead">{d.summary}</p>
+            <div class="facts">
+                <div class="fact"><p class="t-label">Client</p><p class="t-value">{d.client}</p></div>
+                <div class="fact"><p class="t-label">Année</p><p class="t-value">{d.year}</p></div>
+                <div class="fact"><p class="t-label">Rôle</p><p class="t-value">{d.role}</p></div>
+                <div class="fact"><p class="t-label">Durée</p><p class="t-value">{d.duration}</p></div>
+            </div>
+        </div>
+    </header>
+    <div class="wrap2"><div class="frame cover"><HoloImage client:visible src={fx(d.cover)} alt={d.coverAlt} label="Visuel 01" {...holo} /></div></div>
+    <section class="wrap2 brief">
+        <div class="row3">
+            <p class="t-label accent">// Le projet</p>
+            <div class="t-paragraph overview">{paragraphs.map((p) => <p>{p}</p>)}</div>
+        </div>
+    </section>
+    <section class="wrap2 evidence">
+        {d.imageWide && <div class="frame wide"><HoloImage client:visible src={fx(d.imageWide)} alt={d.imageWideAlt} label="Visuel 02" {...holo} /></div>}
+        <div class="pair">
+            {d.imageTall && <div class="frame tall"><HoloImage client:visible src={fx(d.imageTall)} alt={d.imageTallAlt} label="Visuel 03" {...holo} /></div>}
+            {d.imageClosing && <div class="frame closing"><HoloImage client:visible src={fx(d.imageClosing)} alt={d.imageClosingAlt} label="Visuel 04" {...holo} /></div>}
+        </div>
+        {d.galerie.length > 0 && (
+            <div class="gallery">
+                {d.galerie.map((g) => <div class="frame gi"><HoloImage client:visible src={fx(g.image)} alt={g.alt} label="Galerie" {...holo} /></div>)}
+            </div>
+        )}
+    </section>
+    <section class="wrap2 brief">
+        <div class="row3">
+            <p class="t-label accent">// Livrables</p>
+            <p class="t-statement outcome">{d.outcome}</p>
+        </div>
+    </section>
+    {next && (
+        <section class="wrap2 nextm">
+            <a class="next" href={`/work/${next.id}`}>
+                <div class="nt">
+                    <p class="t-label accent">// Projet suivant →</p>
+                    <h2 class="t-display">{next.data.title}</h2>
+                </div>
+                <div class="frame nmedia"><HoloImage client:visible src={fx(next.data.cover)} alt={next.data.coverAlt} label="Projet suivant" /></div>
+            </a>
+        </section>
+    )}
+</Site>
+<style>
+    .wrap2 { width: 100%; max-width: 1600px; margin: 0 auto; padding-left: 40px; padding-right: 40px; }
+    .ch { padding-top: 56px; padding-bottom: 56px; display: flex; flex-direction: column; gap: 32px; }
+    .top { display: flex; justify-content: space-between; align-items: center; }
+    .back { color: var(--high); transition: color .3s var(--ease); }
+    .back:hover { color: var(--accent); }
+    .ch :global(.ttl) { width: 100%; }
+    .intro { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; border-top: 1px solid var(--line); padding-top: 32px; align-items: start; }
+    .facts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; grid-auto-rows: 1fr; }
+    .fact { border: 1px solid var(--line); padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 10px; }
+    .frame { position: relative; background: var(--surface); overflow: clip; width: 100%; }
+    .cover { height: 720px; }
+    .brief { padding-top: 140px; padding-bottom: 140px; }
+    .row3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 48px; align-items: start; }
+    .overview, .outcome { grid-column: span 2; max-width: 760px; }
+    .evidence { display: flex; flex-direction: column; gap: 24px; }
+    .wide { height: 680px; }
+    .pair { display: flex; gap: 24px; }
+    .tall { height: 840px; flex: 1 1 0; }
+    .closing { height: 840px; flex: 1.5 1 0; }
+    .gallery { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+    .gi { height: 560px; }
+    .nextm { padding-bottom: 120px; }
+    .next { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; align-items: center; border-top: 1px solid var(--line); padding-top: 40px; cursor: pointer; }
+    .nt { grid-column: span 2; display: flex; flex-direction: column; gap: 16px; transition: transform .5s var(--ease); transform-origin: left center; }
+    .next:hover .nt { transform: translateX(12px) scale(1.1); }
+    .nmedia { height: 300px; }
+    @media (max-width: 1199.98px) {
+        .wrap2 { padding-left: 24px; padding-right: 24px; }
+        .ch { padding-top: 48px; padding-bottom: 48px; }
+        .intro { grid-template-columns: 1fr; }
+        .cover { height: 560px; }
+        .brief { padding-top: 120px; padding-bottom: 120px; }
+        .wide { height: 480px; }
+        .tall, .closing { height: 620px; }
+        .gallery { gap: 16px; }
+        .gi { height: 420px; }
+        .nextm { padding-bottom: 100px; }
+    }
+    @media (max-width: 809.98px) {
+        .wrap2 { padding-left: 20px; padding-right: 20px; }
+        .ch { padding-top: 40px; padding-bottom: 40px; }
+        .intro { display: flex; flex-direction: column; gap: 28px; }
+        .facts { width: 100%; }
+        .cover { height: 440px; }
+        .brief { padding-top: 88px; padding-bottom: 88px; }
+        .row3 { display: flex; flex-direction: column; gap: 24px; }
+        .overview, .outcome { width: 100%; }
+        .evidence { gap: 16px; }
+        .wide { height: 300px; }
+        .pair { flex-direction: column; gap: 16px; }
+        .tall { height: 520px; flex: none; }
+        .closing { height: 320px; flex: none; }
+        .gallery { grid-template-columns: 1fr; gap: 16px; }
+        .gi { height: 460px; }
+        .nextm { padding-bottom: 88px; }
+        .next { display: flex; flex-direction: column; align-items: flex-start; gap: 24px; }
+        .nt { width: 100%; }
+        .nmedia { height: 220px; }
+    }
+</style>

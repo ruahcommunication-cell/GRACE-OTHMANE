@@ -1,0 +1,61 @@
+---
+// Composant Framer « Footer (Signal) » + override withSignalFooter
+import SignalHeadline from "../fx/SignalHeadline"
+interface Props { compact?: boolean }
+const { compact = false } = Astro.props
+const socials = [
+    { label: "LinkedIn", href: "https://www.linkedin.com/in/grace-othmane-4a1826170/" },
+    { label: "Instagram", href: "https://www.instagram.com/halloruah" },
+]
+---
+<footer class="footer">
+    <div class="signal">
+        <SignalHeadline client:visible headline="OUVRONS/LE DOSSIER" sizing="screen" compact={compact} />
+        <a class="headline-link" href="/contact" aria-label="Get in touch"></a>
+        <div class="hud">
+            <div class="top">
+                <div class="lab"><p class="t-mono accent">//</p><p class="t-mono">Signal</p></div>
+                <div class="status"><span class="dot"></span><p class="t-mono">Ouvert aux projets</p></div>
+            </div>
+            <div class="bottom">
+                <div class="contact">
+                    <p class="t-body lede">Un projet de marque en tête ? Un message et je m’en occupe.</p>
+                    <div class="email"><a class="t-email" href="mailto:ruahcommunication@gmail.com">ruahcommunication@gmail.com</a></div>
+                </div>
+                <div class="side">
+                    <nav class="social" aria-label="Social">
+                        {socials.map((s) => <a class="t-mono" href={s.href} target="_blank" rel="noreferrer">{s.label}</a>)}
+                    </nav>
+                    <p class="t-mono c-low">© 2026 ruah studio — Grace Othmane</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<style>
+    .footer { width: 100%; border-top: 1px solid var(--line); }
+    .signal { position: relative; width: 100%; overflow: clip; }
+    .headline-link { position: absolute; inset: 0; }
+    .hud { position: absolute; inset: 0; z-index: 1; pointer-events: none; padding: 40px 40px 32px; display: flex; flex-direction: column; justify-content: space-between; align-items: center; }
+    .top, .bottom { width: 100%; max-width: 1520px; display: flex; justify-content: space-between; }
+    .top { align-items: center; }
+    .lab, .status { display: flex; align-items: center; }
+    .lab { gap: 16px; }
+    .status { gap: 10px; }
+    .dot { width: 7px; height: 7px; border-radius: 7px; background: var(--signal); box-shadow: 0 0 12px 0 var(--signal); }
+    .bottom { align-items: flex-end; flex-wrap: wrap; gap: 32px; }
+    .contact { max-width: 520px; display: flex; flex-direction: column; align-items: flex-start; gap: 14px; pointer-events: auto; }
+    .email { border-bottom: 1px solid var(--accent); padding-bottom: 5px; }
+    .email .t-email { font-size: clamp(22px, 2.6vw, 38px); }
+    .side { display: flex; flex-direction: column; align-items: flex-end; gap: 12px; pointer-events: auto; }
+    .social { display: flex; gap: 22px; justify-content: flex-end; }
+    @media (max-width: 1199.98px) { .hud { padding: 40px 24px 32px; } }
+    @media (max-width: 809.98px) {
+        .hud { padding: 40px 20px 32px; }
+        .contact, .lede, .side { width: 100%; }
+        .side { align-items: flex-start; }
+        .social { justify-content: flex-start; flex-wrap: wrap; width: 100%; }
+        .social a { display: inline-block; padding: 15px 8px; margin: -15px -8px; }
+    }
+</style>

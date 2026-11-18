@@ -1,0 +1,170 @@
+---
+import Site from "../layouts/Site.astro"
+import SplitTitle from "../components/SplitTitle.astro"
+import SocialLink from "../components/SocialLink.astro"
+import SubmitButton from "../components/SubmitButton.astro"
+---
+<Site title="Contact — Grace Othmane | ruah studio" description="Un projet de marque en tête ? Contactez Grace Othmane, graphiste designer à Paris : branding, identité visuelle, direction artistique, motion design.">
+    <header class="chd w">
+        <div class="r1"><p class="t-label">// Nouveau projet</p><p class="t-label accent">Réponse personnalisée</p></div>
+        <SplitTitle text="Ouvrir un dossier" class="big" y={60} blur={12} dur={1} step={0.03} delay={0.1} />
+        <div class="r2">
+            <p class="t-lead lede">Parlez-moi de votre marque et de votre projet. Quelques lignes suffisent : je réponds personnellement à chaque demande.</p>
+            <a class="t-label mail" href="mailto:ruahcommunication@gmail.com">Ou écrivez à ruahcommunication@gmail.com ↗</a>
+        </div>
+    </header>
+
+    <section class="brief w">
+        <div class="row">
+            <div class="aside">
+                <p class="t-label accent">// Me suivre</p>
+                <div class="channels">
+                    <SocialLink label="LinkedIn" handle="Grace Othmane" href="https://www.linkedin.com/in/grace-othmane-4a1826170/" icon="linkedin" />
+                    <SocialLink label="Instagram" handle="@halloruah" href="https://www.instagram.com/halloruah" icon="instagram" />
+                </div>
+            </div>
+            <form class="form" name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/merci">
+                <input type="hidden" name="form-name" value="contact" />
+                <p class="sr-only"><label>Ne pas remplir <input name="bot-field" /></label></p>
+                <div class="two">
+                    <label class="f"><span class="t-label c-mid">Nom</span><input name="Nom" type="text" placeholder="Marie Dupont" required /></label>
+                    <label class="f"><span class="t-label c-mid">E-mail</span><input name="Email" type="email" placeholder="marie@entreprise.fr" required /></label>
+                </div>
+                <label class="f"><span class="t-label c-mid">Entreprise (facultatif)</span><input name="Entreprise" type="text" placeholder="Nom de votre marque ou entreprise" /></label>
+                <label class="f"><span class="t-label c-mid">Votre besoin</span>
+                    <select name="Besoin" required>
+                        <option>Branding</option><option>Identité visuelle</option><option>Direction artistique</option><option>Motion design</option><option>Design d’application</option><option>Autre</option>
+                    </select>
+                </label>
+                <label class="f"><span class="t-label c-mid">Budget</span>
+                    <select name="Budget">
+                        <option>À définir ensemble</option><option>Moins de 1 000 €</option><option>1 000 – 3 000 €</option><option>Plus de 3 000 €</option>
+                    </select>
+                </label>
+                <label class="f"><span class="t-label c-mid">Votre projet</span><textarea name="Message" placeholder="Présentez votre marque, votre besoin et vos délais." required style="height:180px"></textarea></label>
+                <SubmitButton label="Envoyer le message" />
+            </form>
+        </div>
+    </section>
+
+    <section class="rdv w" id="rdv">
+        <div class="row">
+            <div class="aside a2">
+                <h1 class="t-h1">RDV</h1>
+                <p class="t-lead c-mid">Un premier échange pour parler de votre marque, de vos objectifs et de la meilleure façon de démarrer votre projet. Choisissez une date et un créneau : je vous confirme le rendez-vous par e-mail.</p>
+                <div class="steps">
+                    {["Vous proposez une date et un créneau", "Je vous confirme le rendez-vous par e-mail", "On échange en visio, par téléphone ou à Paris"].map((s, i) => (
+                        <div class="step"><p class="t-label accent">0{i + 1}</p><p class="t-label c-high">{s}</p></div>
+                    ))}
+                </div>
+            </div>
+            <form class="form" name="rdv" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/merci">
+                <input type="hidden" name="form-name" value="rdv" />
+                <p class="sr-only"><label>Ne pas remplir <input name="bot-field" /></label></p>
+                <div class="two">
+                    <label class="f"><span class="t-label c-mid">Nom</span><input name="Nom" type="text" placeholder="Marie Dupont" required /></label>
+                    <label class="f"><span class="t-label c-mid">E-mail</span><input name="Email" type="email" placeholder="marie@entreprise.fr" required /></label>
+                </div>
+                <label class="f"><span class="t-label c-mid">Téléphone (facultatif)</span><input name="Telephone" type="tel" placeholder="06 12 34 56 78" /></label>
+                <label class="f"><span class="t-label c-mid">Format du rendez-vous</span>
+                    <select name="Format" required>
+                        <option>Visio</option><option>Téléphone</option><option>Rencontre à Paris</option><option>Motion design</option><option>Design d’application</option><option>Autre</option>
+                    </select>
+                </label>
+                <div class="two">
+                    <label class="f"><span class="t-label c-mid">Date souhaitée</span><input name="Date" type="date" required /></label>
+                    <label class="f"><span class="t-label c-mid">Créneau</span>
+                        <select name="Creneau" required>
+                            <option>Matin (9 h – 12 h)</option><option>Après-midi (14 h – 18 h)</option><option>Fin de journée (18 h – 20 h)</option><option>Plus de 3 000 €</option>
+                        </select>
+                    </label>
+                </div>
+                <label class="f"><span class="t-label c-mid">Sujet du rendez-vous (facultatif)</span><textarea name="Sujet" placeholder="En quelques mots : votre marque, votre projet, vos délais." style="height:140px"></textarea></label>
+                <SubmitButton label="Demander un rendez-vous" />
+            </form>
+        </div>
+    </section>
+</Site>
+
+<script>
+    // Envoi sans quitter la page, avec les états du bouton Framer (envoi, envoyé, échec)
+    document.addEventListener("astro:page-load", () => {
+        document.querySelectorAll<HTMLFormElement>("form[data-netlify]").forEach((form) => {
+            if (form.dataset.ready) return
+            form.dataset.ready = "1"
+            const btn = form.querySelector<HTMLButtonElement>("button[type=submit]")!
+            const lbl = btn.querySelector(".lbl")!
+            const code = btn.querySelector(".code")!
+            const set = (state: string, text: string, c: string) => {
+                btn.dataset.state = state
+                lbl.textContent = text
+                code.textContent = c
+            }
+            form.addEventListener("submit", async (e) => {
+                e.preventDefault()
+                set("pending", "Envoi en cours…", "ENV-01")
+                try {
+                    const body = new URLSearchParams(new FormData(form) as unknown as Record<string, string>).toString()
+                    const r = await fetch("/", { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body })
+                    if (!r.ok) throw new Error(String(r.status))
+                    set("success", "Message envoyé", "OK")
+                    form.reset()
+                } catch {
+                    set("error", "Échec de l’envoi, réessayez", "ERR")
+                }
+                setTimeout(() => set("", btn.dataset.label || "", "ENV-01"), 4000)
+            })
+        })
+    })
+</script>
+
+<style>
+    .w { width: 100%; max-width: 1600px; margin: 0 auto; padding-left: 40px; padding-right: 40px; }
+    .chd { padding-top: 72px; padding-bottom: 72px; display: flex; flex-direction: column; gap: 36px; overflow: clip; }
+    .r1 { display: flex; justify-content: space-between; align-items: center; }
+    .chd :global(.big) { width: 100%; font-family: var(--f-display); font-variation-settings: "opsz" 72; font-size: 240px; font-weight: 900; letter-spacing: -0.01em; line-height: 0.84em; text-transform: uppercase; color: var(--high); }
+    .r2 { display: flex; justify-content: space-between; align-items: flex-end; border-top: 1px solid var(--line); padding-top: 24px; gap: 16px; }
+    .lede { flex: 1 1 0; max-width: 560px; }
+    .mail:hover { color: var(--high); }
+    .brief { padding-top: 40px; padding-bottom: 160px; }
+    .rdv { padding-top: 112px; padding-bottom: 160px; border-top: 1px solid var(--line); scroll-margin-top: 72px; }
+    .row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 48px; align-items: start; }
+    .aside { display: flex; flex-direction: column; gap: 20px; }
+    .a2 { gap: 28px; }
+    .channels { display: flex; flex-direction: column; }
+    .form { grid-column: span 2; display: flex; flex-direction: column; gap: 28px; }
+    .two { display: flex; gap: 24px; width: 100%; }
+    .two .f { flex: 1 1 0; min-width: 0; }
+    .f { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+    .f input, .f select, .f textarea { width: 100%; height: 56px; padding: 16px; border: 1px solid var(--line-strong); border-radius: 0; background: var(--surface); color: var(--high); font-family: var(--f-body); font-size: 16px; line-height: 1.4em; letter-spacing: 0; outline: none; appearance: none; -webkit-appearance: none; }
+    .f select { line-height: 1.2em; padding-right: 44px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23FF5A1F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 16px center; }
+    .f textarea { resize: none; }
+    .f input::placeholder, .f textarea::placeholder { color: var(--low); }
+    .f input:focus, .f select:focus, .f textarea:focus { border-color: var(--accent); }
+    .f input[type="date"] { color-scheme: dark; }
+    :global(html.ruah-ivory) .f input[type="date"] { color-scheme: light; }
+    .steps { display: flex; flex-direction: column; }
+    .step { display: flex; align-items: center; gap: 20px; padding: 18px 0; border-top: 1px solid var(--line); }
+    @media (max-width: 1199.98px) {
+        .w { padding-left: 24px; padding-right: 24px; }
+        .chd { padding-top: 56px; padding-bottom: 56px; }
+        .chd :global(.big) { font-size: 150px; }
+        .r2 { flex-wrap: wrap; }
+        .brief { padding-top: 24px; padding-bottom: 140px; }
+        .rdv { padding-top: 48px; padding-bottom: 140px; }
+    }
+    @media (max-width: 809.98px) {
+        .w { padding-left: 20px; padding-right: 20px; }
+        .chd { padding-top: 48px; padding-bottom: 48px; }
+        .r1 { flex-direction: column; align-items: flex-start; gap: 8px; }
+        .chd :global(.big) { font-size: 88px; }
+        .r2 { flex-direction: column; align-items: flex-start; }
+        .lede { flex: none; width: 100%; }
+        .brief { padding-top: 16px; padding-bottom: 120px; }
+        .rdv { padding-top: 32px; padding-bottom: 120px; }
+        .row { display: flex; flex-direction: column; gap: 72px; }
+        .brief .form { order: -1; }
+        .form, .aside { width: 100%; }
+        .two { flex-direction: column; gap: 28px; }
+    }
+</style>

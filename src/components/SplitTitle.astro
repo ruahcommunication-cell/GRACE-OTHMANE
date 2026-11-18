@@ -1,0 +1,19 @@
+---
+// textEffect Framer « onMount » par caractère : chaque lettre monte depuis y, avec flou
+interface Props { text: string; tag?: string; class?: string; y?: number; blur?: number; dur?: number; step?: number; delay?: number }
+const { text, tag = "h1", class: cls, y = 60, blur = 12, dur = 0.8, step = 0.02, delay = 0 } = Astro.props
+const Tag = tag as any
+const words = text.split(" ")
+let i = 0
+---
+<Tag class:list={["split", cls]} aria-label={text} style={`--sy:${y}px;--sb:${blur}px;--sd:${dur}s`}>
+    {words.map((w, wi) => (
+        <span class="w" aria-hidden="true">{[...w].map((ch) => <span class="ch" style={`animation-delay:${(delay + step * i++).toFixed(3)}s`}>{ch}</span>)}{wi < words.length - 1 && " "}</span>
+    ))}
+</Tag>
+<style>
+    .w { display: inline-block; white-space: nowrap; }
+    .ch { display: inline-block; animation: chIn var(--sd) cubic-bezier(.16,1,.3,1) both; }
+    @keyframes chIn { from { opacity: 0; transform: translateY(var(--sy)); filter: blur(var(--sb)); } }
+    @media (prefers-reduced-motion: reduce) { .ch { animation: none; } }
+</style>

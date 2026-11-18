@@ -1,0 +1,137 @@
+---
+import Site from "../layouts/Site.astro"
+import Hero from "../components/Hero.astro"
+import Story from "../components/Story.astro"
+import MissionTunnel from "../fx/MissionTunnel"
+import Powers from "../fx/Powers"
+import "../styles/powers.css"
+import { getProjects } from "../lib/projects"
+import { fx } from "../lib/asset"
+
+const projects = await getProjects()
+const items = projects.map((p) => ({
+    title: p.data.title,
+    discipline: p.data.discipline,
+    client: p.data.client,
+    year: String(p.data.year),
+    link: `/work/${p.id}`,
+    image: fx(p.data.cover),
+}))
+
+const videos = [
+    { src: "hDaglaFD52C1S7Mlt5aXGaknu4.mp4", poster: "XYMdbW4Kqdxt2Qm1ZH8h5xuHE.jpg", title: "Solène — ruah studio" },
+    { src: "v01xbqzRBFw3ZHCrXhZeupiW78.mp4", poster: "2XzZZSy6ku2IiktnulXF8gixVs.jpg", title: "Intro — Grace Othmane" },
+    { src: "WwbTvbzv5wEmobw8SqYbb4tGJw.mp4", poster: "UkMWWaabsXBXdQ2BrhEoVExVk.jpg", title: "ONDE — Brand reel" },
+    { src: "GDJesn5hzEAYFckU49ZZMBK6DA.mp4", poster: "T5JsWUCU3h8wbbYYXcdBdD0N00.jpg", title: "ONDE — Logo animation" },
+    { src: "8RdUIlgYOq8wIh7kQETnBkE584.mp4", poster: "tCSRcl3f4OGx2XDxZsXmQcxa9k.jpg", title: "ONDE — Packaging liquid glass" },
+    { src: "p7rZV44Vx7N5byU7EkGozRrgpn4.mp4", poster: "xbq47QjzWM2exmPzVV6UHAVmObQ.jpg", title: "ruah studio" },
+]
+const [feature, ...rest] = videos
+
+const powers = [
+    { name: "Branding", text: "Positionnement, ton et personnalité : les fondations sur lesquelles toute votre marque se construit.", stats: "92, 70, 96, 88, 64" },
+    { name: "Identité visuelle", text: "Logo, couleurs, typographies et charte graphique : un système cohérent qui tient sur tous vos supports.", stats: "84, 90, 72, 80, 86" },
+    { name: "Direction artistique", text: "Un univers visuel fort pour vos campagnes, vos réseaux sociaux et vos contenus.", stats: "98, 62, 90, 76, 58" },
+    { name: "Design d’app", text: "Des interfaces belles et simples à utiliser, fidèles à l’identité de votre marque.", stats: "74, 82, 66, 94, 92" },
+    { name: "Motion design", text: "Logos animés, intros et vidéos de marque : votre identité prend vie en mouvement.", stats: "86, 78, 74, 94, 90" },
+]
+---
+<Site
+    title="Grace Othmane — Graphiste designer à Paris | ruah studio"
+    description="Grace Othmane, graphiste designer à Paris. Branding, identité visuelle, direction artistique, motion design et design d’application. J’aide les marques à marquer les esprits."
+    navOffset={false}
+    compactFooter={false}
+>
+    <Hero />
+    <Story />
+
+    <section class="projects">
+        <MissionTunnel client:visible items={items} screensPerProject={0.7} />
+        <div class="heading-layer">
+            <div class="pin">
+                <div class="mission-heading">
+                    <h2 class="sr-only">Dossiers projets</h2>
+                    <p class="t-mono accent">//</p>
+                    <p class="t-mono">Dossiers projets</p>
+                    <p class="t-mono c-low">{String(items.length).padStart(2, "0")} dossiers</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="motion" id="motion">
+        <div class="content">
+            <div class="header">
+                <div class="mh">
+                    <h2 class="sr-only">Motion design</h2>
+                    <p class="t-mono accent">//</p>
+                    <p class="t-mono">Motion design</p>
+                    <p class="t-mono c-low">06 vidéos</p>
+                </div>
+                <div class="title-row">
+                    <h1 class="t-h1">En mouvement</h1>
+                    <p class="t-body intro">Logos animés, brand reels et intros : quand l’identité visuelle prend vie.</p>
+                </div>
+            </div>
+            <div class="videos">
+                <figure class="card wide" data-appear>
+                    <video src={fx(feature.src)} poster={fx(feature.poster)} controls loop playsinline preload="none"></video>
+                    <figcaption class="cap"><p class="t-mono accent">01</p><p class="t-mono trunc">{feature.title}</p></figcaption>
+                </figure>
+                <div class="vgrid">
+                    {rest.map((v, i) => (
+                        <figure class="card tall" data-appear style={`--ad:${i * 0.06}s`}>
+                            <video src={fx(v.src)} poster={fx(v.poster)} controls loop playsinline preload="none"></video>
+                            <figcaption class="cap"><p class="t-mono accent">{String(i + 2).padStart(2, "0")}</p><p class="t-mono trunc">{v.title}</p></figcaption>
+                        </figure>
+                    ))}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <Powers
+        client:visible
+        label="Super-pouvoirs"
+        count="05 pouvoirs"
+        activeLabel="Actif"
+        liveLabel="En direct"
+        axes="Clarté, Vitesse, Systèmes, Finition, Polyvalence"
+        powers={powers}
+    />
+</Site>
+
+<style>
+    .projects { position: relative; width: 100%; }
+    .heading-layer { position: absolute; inset: 0; pointer-events: none; }
+    .pin { position: sticky; top: 0; height: 100vh; padding: 100px 0 0 6%; }
+    .mission-heading { display: flex; align-items: center; gap: 16px; }
+
+    .motion { width: 100%; padding: 140px 72px; overflow: clip; display: flex; justify-content: center; }
+    .content { width: 100%; max-width: 1200px; display: flex; flex-direction: column; gap: 56px; }
+    .header { display: flex; flex-direction: column; gap: 24px; }
+    .mh { display: flex; align-items: center; gap: 16px; }
+    .title-row { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; }
+    .intro { width: 360px; }
+    .videos { display: flex; flex-direction: column; gap: 16px; }
+    .card { margin: 0; border: 1px solid var(--line); background: var(--surface); overflow: clip; display: flex; flex-direction: column; }
+    .card video { width: 100%; display: block; object-fit: cover; background: transparent; }
+    .wide video { aspect-ratio: 1.78; }
+    .tall video { aspect-ratio: 0.56; }
+    .cap { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-top: 1px solid var(--line); margin: 0; }
+    .trunc { flex: 1; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+    .vgrid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; }
+
+    @media (max-width: 1199.98px) {
+        .motion { padding: 120px 48px; }
+        .title-row { flex-direction: column; align-items: flex-start; gap: 16px; }
+        .vgrid { gap: 12px; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+    }
+    @media (max-width: 809.98px) {
+        .motion { padding: 96px 20px; }
+        .title-row .t-h1, .intro { width: 100%; }
+        .vgrid { display: flex; gap: 12px; overflow-x: auto; scrollbar-width: none; }
+        .vgrid::-webkit-scrollbar { display: none; }
+        .vgrid .card { width: 210px; flex-shrink: 0; }
+    }
+</style>

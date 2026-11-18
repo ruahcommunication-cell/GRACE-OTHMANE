@@ -1,0 +1,85 @@
+---
+// Composant Framer « Navigation » (Desktop / Tablet / Phone / Phone Open)
+import ThemeToggle from "../fx/ThemeToggle"
+import Icon from "./Icon.astro"
+import { fx } from "../lib/asset"
+const path = Astro.url.pathname.replace(/\/$/, "") || "/"
+const links = [
+    { href: "/work", label: "Travaux" },
+    { href: "/about", label: "À propos" },
+    { href: "/contact", label: "Contact" },
+]
+const isCurrent = (h: string) => path === h || (h === "/work" && path.startsWith("/work/"))
+---
+<nav class="nav" id="site-nav" aria-label="Navigation principale">
+    <div class="bar">
+        <a href="/" class="wordmark" data-close>
+            <img src={fx("gzm1PzlIY3gBhQJzjlUplDkB3IM.png")} alt="Mascotte ruah studio" width="44" height="40" class="masc" />
+            <p class="t-nav brand">RUAH STUDIO</p>
+        </a>
+        <div class="actions">
+            <div class="links">
+                {links.map((l) => <a href={l.href} class:list={["t-nav", "navlink", { current: isCurrent(l.href) }]} aria-current={isCurrent(l.href) ? "page" : undefined}>{l.label}</a>)}
+            </div>
+            <ThemeToggle client:load />
+            <button class="menu-btn" type="button" aria-expanded="false" aria-label="Open menu" aria-controls="nav-drawer">
+                <Icon name="list" class="i-open" /><Icon name="x" class="i-close" />
+            </button>
+        </div>
+    </div>
+    <div class="drawer" id="nav-drawer">
+        {links.map((l) => <a href={l.href} class:list={["t-menu-link", "navlink", { current: isCurrent(l.href) }]} data-close>{l.label}</a>)}
+        <div class="spacer"></div>
+        <div class="menu-contact">
+            <p class="t-label accent">// Démarrer un projet</p>
+            <a class="t-lead" href="mailto:ruahcommunication@gmail.com" data-close>ruahcommunication@gmail.com</a>
+        </div>
+    </div>
+</nav>
+
+<script>
+    document.addEventListener("astro:page-load", () => {
+    const nav = document.getElementById("site-nav")!
+    document.documentElement.style.overflow = ""
+    const btn = nav.querySelector<HTMLButtonElement>(".menu-btn")!
+    const set = (open: boolean) => {
+        nav.classList.toggle("open", open)
+        btn.setAttribute("aria-expanded", String(open))
+        btn.setAttribute("aria-label", open ? "Close menu" : "Open menu")
+        document.documentElement.style.overflow = open ? "hidden" : ""
+    }
+    btn.addEventListener("click", () => set(!nav.classList.contains("open")))
+    nav.querySelectorAll("[data-close]").forEach((a) => a.addEventListener("click", () => set(false)))
+    window.matchMedia("(min-width: 810px)").addEventListener("change", (e) => e.matches && set(false))
+    })
+</script>
+
+<style>
+    .nav { position: fixed; left: 0; right: 0; top: 0; z-index: 10; background: var(--nav-glass); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); padding: 0 40px; overflow: clip; display: flex; flex-direction: column; align-items: center; }
+    .bar { width: 100%; max-width: 1520px; height: 72px; display: flex; align-items: center; justify-content: space-between; }
+    .wordmark { display: flex; align-items: center; gap: 10px; }
+    .masc { width: 44px; height: 40px; object-fit: cover; object-position: center top; }
+    .brand { font-family: var(--f-inter); font-weight: 700; }
+    .actions { display: flex; align-items: center; gap: 24px; }
+    .links { display: flex; align-items: center; gap: 28px; }
+    .navlink { color: var(--mid); transition: color .3s var(--ease); }
+    .navlink:hover, .navlink.current { color: var(--high); }
+    .menu-btn { display: none; width: 40px; height: 40px; align-items: center; justify-content: center; background: none; border: 0; padding: 0; cursor: pointer; color: var(--high); }
+    .i-close { display: none; }
+    .drawer { display: none; width: 100%; flex-direction: column; align-items: flex-start; gap: 18px; padding: 16px 0 32px; }
+    .drawer .navlink { color: var(--mid); }
+    .spacer { height: 16px; width: 100%; }
+    .menu-contact { width: 100%; display: flex; flex-direction: column; gap: 12px; padding-top: 20px; border-top: 1px solid var(--line); }
+    @media (max-width: 1199.98px) { .nav { padding: 0 24px; } }
+    @media (max-width: 809.98px) {
+        .nav { padding: 0 20px; max-height: 60px; transition: max-height .4s var(--ease), background-color .3s; }
+        .bar { height: 60px; flex-shrink: 0; }
+        .links { display: none; }
+        .menu-btn { display: flex; }
+        .drawer { display: flex; }
+        .nav.open { max-height: 100vh; min-height: 100vh; background: var(--bg); }
+        .nav.open .drawer { padding: 24px 0 28px; }
+        .nav.open .i-open { display: none; }
+        .nav.open .i-close { display: block; }
+    }
+</style>

@@ -1,0 +1,134 @@
+---
+// Composant Framer « Hero (Suit Up) » + override withSuitUpHero
+import SuitUpFX from "../fx/SuitUpFX"
+import { fx } from "../lib/asset"
+
+const p = {
+    heading: "GRACE OTHMANE — Graphiste designer à Paris. J’aide les marques à marquer les esprits.",
+    name1: "GRACE",
+    name2: "OTHMANE",
+    alias1: "GRACE",
+    alias2: "MATABO",
+    intro: "Graphiste designer à Paris. Branding, identité visuelle, direction artistique, motion design et design d’application.",
+    file: "DOSSIER 001 / CIVIL",
+    fileEnd: "DOSSIER 001 / RUAH STUDIO",
+    coords: "48.857° N 2.352° E",
+    meter: "Mode studio",
+    statusLabel: "Statut",
+    stateStart: "Civil",
+    stateMid: "Transformation",
+    stateEnd: "Activé",
+    hint: "Défilez pour activer le studio",
+    portrait: fx("DzUjFtDKCiqaAYMnSchBkM1og.png"),
+    alterEgo: fx("vbhztlni2fEKLl7dXB5b7w5ZT40.png"),
+}
+---
+<section class="hero" data-name="Suit Up">
+    <div class="stage">
+        <h1 class="sr-only">{p.heading}</h1>
+        <div class="fx a-fx">
+            <SuitUpFX client:load image={p.portrait} hoverImage={p.alterEgo} alt="Portrait de Grace Othmane" imageHeight={0.9} brushSize={150} scrollLayer="Suit Up" />
+        </div>
+        <div class="fade"></div>
+        <div class="names">
+            <div class="col">
+                <div class="a-n1"><p class="t-hero-outline nm" data-name="Name 1">{p.name1}</p></div>
+                <div class="a-n2 n2wrap"><p class="t-hero nm n2" data-name="Name 2">{p.name2}</p></div>
+            </div>
+        </div>
+        <div class="hud">
+            <div class="vf">
+                <i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i>
+                <div class="file a-up1"><span class="dot"></span><p class="t-mono" data-name="File Label">{p.file}</p></div>
+                <p class="t-mono coords a-up1">{p.coords}</p>
+                <div class="bottom a-up2">
+                    <p class="t-small intro">{p.intro}</p>
+                    <div class="meter">
+                        <div class="row"><p class="t-mono dim">{p.meter}</p><p class="t-mono accent" data-name="Percent">000%</p></div>
+                        <div class="bar"><div class="fill" data-name="Meter Fill"></div></div>
+                        <div class="row"><p class="t-mono dim">{p.statusLabel}</p><p class="t-mono sig" data-name="Status Value">{p.stateStart}</p></div>
+                    </div>
+                </div>
+                <div class="hintrow"><div class="hint" data-name="Hint"><p class="t-mono">{p.hint}</p><span class="hline"></span></div></div>
+            </div>
+        </div>
+        <div class="data" aria-hidden="true">
+            <p data-name="Alias 1">{p.alias1}</p><p data-name="Alias 2">{p.alias2}</p>
+            <p data-name="State Mid">{p.stateMid}</p><p data-name="State End">{p.stateEnd}</p>
+            <p data-name="File Label End">{p.fileEnd}</p>
+        </div>
+    </div>
+</section>
+
+<script>
+    import { suitUpHero } from "../fx/native"
+    document.addEventListener("astro:page-load", () =>
+        document.querySelectorAll<HTMLElement>('[data-name="Suit Up"]').forEach((el) => {
+            if (el.dataset.fxInit) return
+            el.dataset.fxInit = "1"
+            suitUpHero(el)
+        })
+    )
+</script>
+
+<style>
+    .hero { position: relative; width: 100%; height: 220vh; background: var(--bg); }
+    .stage { position: sticky; top: 0; height: 100vh; width: 100%; overflow: clip; background: var(--bg); }
+    .fx { position: absolute; inset: 0; }
+    .fade { position: absolute; left: 0; bottom: 0; width: 100%; height: 38%; pointer-events: none; background: linear-gradient(0deg, var(--bg) 8%, rgba(7, 8, 10, 0) 100%); }
+    .names { position: absolute; inset: 0; display: flex; pointer-events: none; padding: 0 3%; }
+    .col { width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding-top: 70px; }
+    .nm { user-select: none; white-space: nowrap; font-size: clamp(72px, 22vw, 420px); will-change: transform; }
+    .n2wrap { width: 100%; }
+    .n2 { text-align: right; color: var(--accent); opacity: 0.92; }
+    .hud { position: absolute; inset: 0; padding: 88px 3% 28px; pointer-events: none; display: flex; }
+    .vf { position: relative; width: 100%; height: 100%; }
+    .c { position: absolute; width: 18px; height: 18px; border: 0 solid var(--accent); }
+    .tl { left: 0; top: 0; border-top-width: 1px; border-left-width: 1px; }
+    .tr { right: 0; top: 0; border-top-width: 1px; border-right-width: 1px; }
+    .bl { left: 0; bottom: 0; border-bottom-width: 1px; border-left-width: 1px; }
+    .br { right: 0; bottom: 0; border-bottom-width: 1px; border-right-width: 1px; }
+    .file { position: absolute; left: 28px; top: 22px; display: flex; align-items: center; gap: 10px; }
+    .dot { width: 7px; height: 7px; border-radius: 7px; background: var(--accent); box-shadow: 0 0 12px 0 var(--accent); }
+    .coords { position: absolute; right: 28px; top: 22px; opacity: 0.6; }
+    .bottom { position: absolute; left: 0; bottom: 0; width: 100%; padding: 0 28px 24px; display: flex; justify-content: space-between; align-items: flex-end; }
+    .intro { width: 300px; opacity: 0.78; }
+    .meter { width: 220px; display: flex; flex-direction: column; gap: 10px; }
+    .row { display: flex; justify-content: space-between; }
+    .dim { opacity: 0.6; }
+    .sig { color: var(--signal); }
+    .bar { height: 2px; background: var(--line); overflow: clip; }
+    .fill { height: 100%; background: var(--accent); box-shadow: 0 0 10px 0 var(--accent); transform: scaleX(0); transform-origin: left; }
+    .hintrow { position: absolute; left: 0; bottom: 24px; width: 100%; display: flex; justify-content: center; }
+    .hint { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    .hline { width: 1px; height: 36px; background: linear-gradient(180deg, var(--accent) 0%, rgba(0, 0, 0, 0) 100%); }
+    .data { position: absolute; width: 1px; height: 1px; overflow: hidden; opacity: 0; pointer-events: none; }
+
+    /* Animations d'entrée (appearEffect onMount) */
+    @keyframes inScale { from { opacity: 0; transform: scale(1.18); } }
+    @keyframes inDown { from { opacity: 0; transform: translateY(-40px); } }
+    @keyframes inUp40 { from { opacity: 0; transform: translateY(40px); } }
+    @keyframes inUp12 { from { opacity: 0; transform: translateY(12px); } }
+    @keyframes inUp24 { from { opacity: 0; transform: translateY(24px); } }
+    .a-fx { animation: inScale 3s var(--ease) both; }
+    .a-n1 { animation: inDown 2s var(--ease) 0.35s both; }
+    .a-n2 { animation: inUp40 2s var(--ease) 0.35s both; }
+    .a-up1 { animation: inUp12 1.5s var(--ease) 0.8s both; }
+    .a-up2 { animation: inUp24 1.5s var(--ease) 1s both; }
+    @media (prefers-reduced-motion: reduce) { .a-fx, .a-n1, .a-n2, .a-up1, .a-up2 { animation: none; } }
+
+    @media (max-width: 1199.98px) {
+        .names { z-index: 2; }
+        .col { padding-top: 55px; }
+        .hintrow { display: none; }
+    }
+    @media (max-width: 809.98px) {
+        .hero { height: 180vh; }
+        .names { padding: 0 5%; }
+        .col { padding-top: 40px; }
+        .coords { display: none; }
+        .bottom { flex-direction: column; align-items: flex-start; gap: 29.2px; }
+        .intro { width: 100%; max-width: 320px; }
+        .meter { width: 100%; }
+    }
+</style>

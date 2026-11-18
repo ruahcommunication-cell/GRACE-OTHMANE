@@ -1,0 +1,72 @@
+---
+import Site from "../../layouts/Site.astro"
+import SplitTitle from "../../components/SplitTitle.astro"
+import HoloImage from "../../fx/HoloImage"
+import { getProjects } from "../../lib/projects"
+import { fx } from "../../lib/asset"
+
+const projects = await getProjects()
+const [featured, ...rest] = projects
+---
+<Site title="Projets — Grace Othmane | ruah studio" description="Une sélection de projets de Grace Othmane, graphiste designer à Paris : identités visuelles, packaging, print et direction artistique." image="DzUjFtDKCiqaAYMnSchBkM1og.png">
+    <header class="ah">
+        <div class="row1"><p class="t-label">// Archives</p><p class="t-label accent">Tous les projets</p></div>
+        <SplitTitle text="Dossiers projets" class="big" />
+        <div class="row2">
+            <p class="t-lead lede">Une sélection de projets : identités visuelles, packaging, print et direction artistique, pour des marques en France et à l’international.</p>
+            <p class="t-label hint hint-d">Survolez un dossier pour l’ouvrir ↗</p>
+            <p class="t-label hint hint-t c-mid">Touchez un dossier pour l’ouvrir ↗</p>
+        </div>
+    </header>
+    <div class="archive">
+        {[featured].map((p) => (
+            <a class="file" href={`/work/${p.id}`} data-appear style="--ay:70px">
+                <div class="media feat"><HoloImage client:visible src={fx(p.data.cover)} alt={p.data.coverAlt} label="Projet phare" /></div>
+                <div class="meta"><p class="t-label accent">Dossier {p.data.fileNo}</p><p class="t-label">{p.data.year}</p></div>
+                <h2 class="t-display">{p.data.title}</h2>
+                <div class="tags"><p class="t-label">{p.data.discipline}</p><div class="cg"><p class="t-label accent">/</p><p class="t-label">{p.data.client}</p></div></div>
+            </a>
+        ))}
+        <div class="list">
+            {rest.map((p) => (
+                <a class="file" href={`/work/${p.id}`} data-appear style="--ay:70px">
+                    <div class="media"><HoloImage client:visible src={fx(p.data.cover)} alt={p.data.coverAlt} label="Dossier" /></div>
+                    <div class="meta"><p class="t-label accent">Dossier {p.data.fileNo}</p><p class="t-label">{p.data.year}</p></div>
+                    <h2 class="t-h1">{p.data.title}</h2>
+                    <div class="tags"><p class="t-label">{p.data.discipline}</p><div class="cg"><p class="t-label accent">/</p><p class="t-label">{p.data.client}</p></div></div>
+                </a>
+            ))}
+        </div>
+    </div>
+</Site>
+<style>
+    .ah { width: 100%; max-width: 1600px; margin: 0 auto; padding: 72px 40px; display: flex; flex-direction: column; gap: 36px; overflow: clip; }
+    .row1 { display: flex; justify-content: space-between; align-items: center; }
+    .ah :global(.big) { width: 100%; font-family: var(--f-display); font-variation-settings: "opsz" 72; font-size: 240px; font-weight: 900; letter-spacing: -0.01em; line-height: 0.84em; text-transform: uppercase; color: var(--high); }
+    .row2 { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; border-top: 1px solid var(--line); padding-top: 24px; gap: 16px; }
+    .lede { flex: 1 1 0; max-width: 560px; }
+    .hint-t { display: none; }
+    .archive { width: 100%; max-width: 1600px; margin: 0 auto; padding: 0 40px 160px; display: flex; flex-direction: column; gap: 96px; }
+    .list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 88px 32px; }
+    .file { display: flex; flex-direction: column; gap: 18px; cursor: pointer; }
+    .media { width: 100%; aspect-ratio: 1.3; background: var(--surface); overflow: clip; position: relative; }
+    .media.feat { aspect-ratio: 2.15; }
+    .meta { display: flex; justify-content: space-between; align-items: center; }
+    .tags { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; }
+    .cg { display: flex; align-items: center; gap: 12px; }
+    @media (max-width: 1199.98px) {
+        .ah { padding: 56px 24px; }
+        .ah :global(.big) { font-size: 150px; }
+        .hint-d { display: none; } .hint-t { display: block; }
+        .archive { padding: 0 24px 140px; }
+    }
+    @media (max-width: 809.98px) {
+        .ah { padding: 48px 20px; }
+        .ah :global(.big) { font-size: 88px; }
+        .row2 { flex-direction: column; align-items: flex-start; }
+        .lede { width: 100%; flex: none; }
+        .archive { padding: 0 20px 120px; gap: 72px; }
+        .list { grid-template-columns: 1fr; gap: 72px; }
+        .media, .media.feat { aspect-ratio: 1.2; }
+    }
+</style>

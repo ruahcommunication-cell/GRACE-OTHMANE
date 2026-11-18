@@ -1,0 +1,23 @@
+---
+// Composant Framer « Arrow Link » (variantes Forward / Back)
+import Icon from "./Icon.astro"
+interface Props { href: string; label: string; back?: boolean; download?: boolean | string; icon?: string; target?: string }
+const { href, label, back = false, download, icon, target } = Astro.props
+const ic = icon ?? (back ? "arrow-left" : "arrow-right")
+---
+<a class:list={["al", { back }]} href={href} download={download} target={target} rel={target ? "noreferrer" : undefined}>
+    <span class="c">
+        {back && <Icon name={ic} size={18} class="i" />}
+        <span class="t-small lbl">{label}</span>
+        {!back && <Icon name={ic} size={18} class="i" />}
+    </span>
+</a>
+<style>
+    .al { display: inline-flex; align-items: center; cursor: pointer; }
+    .c { display: inline-flex; align-items: center; gap: 8px; transition: transform .4s var(--ease); }
+    .al:hover .c { transform: translateX(4px) scale(1.1); }
+    .al.back:hover .c { transform: translateX(-4px) scale(1.1); }
+    .lbl { color: var(--high); transition: color .3s var(--ease); }
+    .al:hover .lbl { color: var(--accent); }
+    .c :global(.i) { color: var(--accent); }
+</style>

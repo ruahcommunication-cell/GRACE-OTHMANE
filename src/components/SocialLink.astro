@@ -1,0 +1,21 @@
+---
+import Icon from "./Icon.astro"
+interface Props { label: string; handle: string; href: string; icon: string }
+const { label, handle, href, icon } = Astro.props
+---
+<a class="sl" href={href} target="_blank" rel="noreferrer">
+    <span class="bb"><Icon name={icon} size={22} /></span>
+    <span class="lg"><span class="t-value lbl">{label}</span><span class="t-label">{handle}</span></span>
+    <Icon name="arrow-up-right" size={22} class="arr" />
+</a>
+<style>
+    .sl { display: flex; align-items: center; gap: 16px; padding: 18px 0; border-top: 1px solid var(--line); width: 100%; cursor: pointer; }
+    .bb { width: 48px; height: 48px; flex-shrink: 0; border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; color: var(--high); transition: border-color .5s var(--ease), color .5s var(--ease); }
+    .lg { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 6px; transition: padding .5s var(--ease); }
+    .lbl { transition: color .5s var(--ease); }
+    .sl :global(.arr) { color: var(--mid); transition: transform .5s var(--ease), color .5s var(--ease); }
+    .sl:hover .bb { border-color: var(--accent); color: var(--accent); }
+    .sl:hover .lg { padding-left: 12px; }
+    .sl:hover .lbl { color: var(--accent); }
+    .sl:hover :global(.arr) { transform: rotate(45deg); color: var(--accent); }
+</style>

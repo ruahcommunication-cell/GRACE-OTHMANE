@@ -1,0 +1,103 @@
+# Espace admin de graceothmane.com (Decap CMS)
+backend:
+  name: github
+  repo: ruahcommunication-cell/grace-othmane
+  branch: main
+  commit_messages:
+    create: "Admin : ajout de {{collection}} « {{slug}} »"
+    update: "Admin : modification de {{collection}} « {{slug}} »"
+    delete: "Admin : suppression de {{collection}} « {{slug}} »"
+    uploadMedia: "Admin : ajout du fichier {{path}}"
+    deleteMedia: "Admin : suppression du fichier {{path}}"
+
+locale: fr
+site_url: https://graceothmane.com
+display_url: https://graceothmane.com
+logo_url: https://framerusercontent.com/images/gzm1PzlIY3gBhQJzjlUplDkB3IM.png
+media_folder: public/assets/uploads
+public_folder: /assets/uploads
+
+collections:
+  - name: projects
+    label: Projets
+    label_singular: Projet
+    folder: src/content/projects
+    extension: json
+    format: json
+    create: true
+    slug: "{{slug}}"
+    identifier_field: title
+    summary: "{{fileNo}} — {{title}} ({{year}})"
+    sortable_fields: [sortOrder, title, year]
+    fields:
+      - { name: title, label: Titre }
+      - { name: fileNo, label: "N° de dossier (ex. 14)", required: false }
+      - { name: sortOrder, label: "Ordre d’affichage (1 = en premier)", widget: number, value_type: int }
+      - { name: client, label: Client }
+      - { name: year, label: Année, widget: number, value_type: int }
+      - { name: discipline, label: "Disciplines (ex. Identité visuelle, Packaging)" }
+      - { name: summary, label: Résumé, widget: text }
+      - { name: role, label: Rôle }
+      - { name: duration, label: Durée, required: false }
+      - { name: cover, label: "Image de couverture", widget: image }
+      - { name: coverAlt, label: "Description de la couverture (accessibilité)", required: false }
+      - { name: imageWide, label: "Visuel 02 (large)", widget: image, required: false }
+      - { name: imageWideAlt, label: "Description du visuel 02", required: false }
+      - { name: imageTall, label: "Visuel 03 (vertical)", widget: image, required: false }
+      - { name: imageTallAlt, label: "Description du visuel 03", required: false }
+      - { name: imageClosing, label: "Visuel 04", widget: image, required: false }
+      - { name: imageClosingAlt, label: "Description du visuel 04", required: false }
+      - { name: overview, label: "Le projet (texte)", widget: text }
+      - { name: outcome, label: Livrables, required: false }
+      - name: galerie
+        label: Galerie
+        label_singular: Image
+        widget: list
+        required: false
+        fields:
+          - { name: image, label: Image, widget: image }
+          - { name: alt, label: Description, required: false }
+
+  - name: experience
+    label: Parcours & formations
+    label_singular: Ligne de parcours
+    folder: src/content/experience
+    extension: json
+    format: json
+    create: true
+    slug: "{{slug}}"
+    identifier_field: role
+    summary: "{{categorie}} — {{role}} ({{period}})"
+    sortable_fields: [order, role]
+    fields:
+      - { name: categorie, label: Catégorie, widget: select, options: ["Expérience", "Formation"] }
+      - { name: role, label: "Poste ou diplôme" }
+      - { name: company, label: "Entreprise ou école, ville" }
+      - { name: period, label: "Période (ex. 2023–2024)" }
+      - { name: order, label: "Ordre (1 = en haut)", widget: number, value_type: int }
+
+  - name: testimonials
+    label: Avis clients
+    label_singular: Avis
+    folder: src/content/testimonials
+    extension: json
+    format: json
+    create: true
+    slug: "{{slug}}"
+    identifier_field: name
+    sortable_fields: [order, name]
+    fields:
+      - { name: name, label: Nom }
+      - { name: role, label: "Fonction" }
+      - { name: quote, label: "Avis (avec les guillemets « »)", widget: text }
+      - { name: photo, label: Photo, widget: image, required: false }
+      - { name: order, label: "Ordre (1 = en premier)", widget: number, value_type: int }
+
+  - name: settings
+    label: Réglages
+    files:
+      - name: cv
+        label: Mon CV
+        file: src/content/settings.json
+        fields:
+          - { name: cv, label: "Fichier PDF du CV", widget: file }

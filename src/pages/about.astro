@@ -1,0 +1,124 @@
+---
+import { getCollection } from "astro:content"
+import Site from "../layouts/Site.astro"
+import SplitTitle from "../components/SplitTitle.astro"
+import ExperienceRow from "../components/ExperienceRow.astro"
+import ArrowLink from "../components/ArrowLink.astro"
+import AlterEgoReveal from "../fx/AlterEgoReveal"
+import settings from "../content/settings.json"
+import { fx } from "../lib/asset"
+
+const exp = (await getCollection("experience")).sort((a, b) => a.data.order - b.data.order)
+const jobs = exp.filter((e) => e.data.categorie === "Expérience")
+const studies = exp.filter((e) => e.data.categorie === "Formation")
+const reviews = (await getCollection("testimonials")).sort((a, b) => a.data.order - b.data.order)
+const facts = [
+    ["Alias", "Ruah studio"],
+    ["Base", "Paris"],
+    ["Clients", "Start-up & grands groupes"],
+    ["Disponibilité", "Ouvert aux opportunités"],
+]
+---
+<Site title="À propos — Grace Othmane | ruah studio" description="Grace Othmane est graphiste designer à Paris, spécialisé en branding, identité visuelle et motion design, sous le nom de ruah studio.">
+    <section class="pf w">
+        <div class="top"><p class="t-label">// Dossier personnel</p><p class="t-label accent">Accès : public</p></div>
+        <div class="dossier">
+            <div class="dt">
+                <SplitTitle text="Grace Othmane" class="t-display accent" y={50} blur={10} dur={0.9} step={0.03} delay={0.05} />
+                <h2 class="t-h2">Je crée des identités visuelles qui aident les marques à marquer les esprits, dès le premier regard.</h2>
+                <div class="facts">
+                    {facts.map(([k, v]) => <div class="fact"><p class="t-label accent">{k}</p><p class="t-h3">{v}</p></div>)}
+                </div>
+                <div class="t-paragraph bio">
+                    <p>Je suis Grace Othmane, graphiste designer basé à Paris, spécialisé en branding, en identité visuelle et en motion design. Je conçois des identités qui aident les marques à marquer les esprits, de la première idée jusqu’aux fichiers finaux.</p>
+                    <p>En entreprise, en agence ou sur un projet ponctuel, je m’adapte au cadre et je travaille main dans la main avec les équipes marketing, produit et communication.</p>
+                    <p>Aujourd’hui, je suis ouvert à de nouvelles opportunités : un poste, une collaboration ou un projet de marque à construire ensemble.</p>
+                </div>
+            </div>
+            <div class="ae">
+                <AlterEgoReveal client:visible image={fx("WAnJbFyz4iFSUz4ek6dZTQAsFI.png")} hoverImage={fx("TAIYw5GdcbUs9BUbs4GH4A13HI.png")} alt="Portrait de Grace Othmane" />
+                <p class="t-label hint hint-d">Survolez pour révéler l’alter ego</p>
+                <p class="t-label hint hint-t">Touchez et glissez pour révéler l’alter ego</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="rec w sr">
+        <div class="rh"><h2 class="t-h1">Parcours</h2><p class="t-label accent">// Carrière</p></div>
+        <div class="list">{jobs.map((e) => <ExperienceRow period={e.data.period} role={e.data.role} company={e.data.company} />)}</div>
+    </section>
+
+    <section class="rec w fo">
+        <div class="rh"><h2 class="t-h1">Formations</h2><p class="t-label accent">// Diplômes</p></div>
+        <div class="list">{studies.map((e) => <ExperienceRow period={e.data.period} role={e.data.role} company={e.data.company} />)}</div>
+        {settings.cv && <div class="cv"><ArrowLink href={fx(settings.cv)} label="Télécharger mon CV" icon="download" target="_blank" /></div>}
+    </section>
+
+    <section class="rec w te">
+        <div class="rh"><h2 class="t-h1">Avis clients</h2><p class="t-label accent">// Paroles de clients</p></div>
+        <div class="reports">
+            {reviews.map((r) => (
+                <article class="report">
+                    <div class="body"><p class="t-label accent">// ★★★★★</p><p class="t-lead">{r.data.quote}</p></div>
+                    <div class="author">
+                        {r.data.photo && <img class="photo" src={fx(r.data.photo)} alt="" />}
+                        <div class="meta"><h3 class="t-h3 accent">{r.data.name}</h3><p class="t-label">{r.data.role}</p></div>
+                    </div>
+                </article>
+            ))}
+        </div>
+    </section>
+</Site>
+<style>
+    .w { width: 100%; max-width: 1600px; margin: 0 auto; padding-left: 40px; padding-right: 40px; }
+    .pf { padding-top: 56px; padding-bottom: 120px; display: flex; flex-direction: column; gap: 40px; }
+    .top { display: flex; justify-content: space-between; align-items: center; }
+    .dossier { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: start; }
+    .dt { display: flex; flex-direction: column; gap: 40px; min-width: 0; }
+    .facts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; grid-auto-rows: 1fr; }
+    .fact { border: 1px solid var(--line); padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 10px; }
+    .bio { max-width: 560px; }
+    .ae { position: sticky; top: 96px; height: 820px; border: 1px solid var(--line); overflow: clip; }
+    .hint { position: absolute; left: 18px; top: 16px; }
+    .hint-t { display: none; }
+    .rec { display: flex; flex-direction: column; gap: 48px; }
+    .sr { padding-top: 40px; padding-bottom: 56px; }
+    .fo { padding-top: 40px; padding-bottom: 140px; }
+    .te { padding-top: 40px; padding-bottom: 140px; }
+    .rh { display: flex; justify-content: space-between; align-items: flex-end; }
+    .list { width: 100%; }
+    .cv { display: flex; }
+    .reports { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+    .report { border: 1px solid var(--line); padding: 24px; display: flex; flex-direction: column; justify-content: space-between; transition: transform .5s var(--ease), background-color .5s var(--ease), box-shadow .5s var(--ease); }
+    .report:hover { transform: translateY(-6px); background: var(--surface); box-shadow: inset 0 2px 0 0 var(--accent); }
+    .body { display: flex; flex-direction: column; gap: 24px; padding-bottom: 40px; }
+    .author { display: flex; align-items: center; gap: 16px; border-top: 1px solid var(--line); padding-top: 20px; }
+    .photo { width: 72px; height: 72px; object-fit: cover; border: 1px solid var(--line); filter: grayscale(1); }
+    .meta { display: flex; flex-direction: column; gap: 8px; }
+    @media (max-width: 1199.98px) {
+        .w { padding-left: 24px; padding-right: 24px; }
+        .pf { padding-top: 48px; padding-bottom: 100px; }
+        .dossier { grid-template-columns: 1fr; }
+        .dt :global(.t-h2) { max-width: 720px; }
+        .ae { position: relative; top: 0; height: 720px; }
+        .hint-d { display: none; } .hint-t { display: block; }
+        .sr { padding-top: 120px; padding-bottom: 48px; }
+        .fo { padding-top: 120px; padding-bottom: 120px; }
+        .te { padding-bottom: 120px; }
+        .reports { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 809.98px) {
+        .w { padding-left: 20px; padding-right: 20px; }
+        .pf { padding-top: 40px; padding-bottom: 80px; }
+        .dossier { display: flex; flex-direction: column; gap: 40px; }
+        .dt, .ae { width: 100%; }
+        .ae { height: 560px; }
+        .rec { gap: 32px; }
+        .sr { padding-top: 88px; }
+        .fo { padding-top: 88px; }
+        .te { padding-bottom: 88px; }
+        .rh { flex-direction: column; align-items: flex-start; gap: 12px; }
+        .reports { display: flex; flex-direction: column; gap: 12px; }
+        .report { padding: 20px; gap: 32px; }
+    }
+</style>

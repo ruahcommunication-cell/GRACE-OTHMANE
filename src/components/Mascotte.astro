@@ -1,0 +1,173 @@
+---
+// Code personnalisé Framer « ruah-mascotte » : la mascotte qui parle (assistant vocal ElevenLabs), reprise à l'identique
+import { fx } from "../lib/asset"
+const img = fx("gzm1PzlIY3gBhQJzjlUplDkB3IM.png")
+---
+<div id="ruah-mascotte" aria-live="polite" data-img={img} transition:persist="ruah-mascotte">
+  <button id="ruah-m-btn" type="button" aria-label="Parler avec l'assistant de ruah studio">
+    <span id="ruah-m-siri"><i></i><i></i><i></i></span><span id="ruah-m-ring"></span>
+    <canvas id="ruah-m-cv" width="360" height="360"></canvas>
+  </button>
+  <div id="ruah-m-pill"><span id="ruah-m-dot"></span><span id="ruah-m-txt">Une question ? Parlez-moi</span></div>
+  <button id="ruah-m-close" type="button" aria-label="Masquer l'assistant">×</button>
+</div>
+<style is:global>
+#ruah-mascotte{position:fixed;right:24px;bottom:24px;z-index:9999;display:flex;flex-direction:column;align-items:flex-end;gap:10px;font-family:Switzer,Inter,system-ui,sans-serif}
+#ruah-mascotte.ruah-hidden{display:none}
+#ruah-m-btn{position:relative;width:120px;height:120px;border-radius:50%;border:0;padding:0;cursor:pointer;background:transparent;box-shadow:none;overflow:visible;transform:scale(1);transition:transform .25s ease}
+#ruah-m-siri{position:absolute;inset:-20px;border-radius:50%;pointer-events:none;z-index:-1;--l:.15;transform:scale(calc(.9 + var(--l) * .32));opacity:calc(.6 + var(--l) * .4)}
+#ruah-m-siri i{position:absolute;inset:0;border-radius:50%;mix-blend-mode:screen;filter:blur(calc(9px + var(--l) * 8px))}
+#ruah-m-siri i:nth-child(1){background:conic-gradient(from 0deg,#2f7bff,#8b5cf6,#ff3d7f,#ff5a1f,#00d4ff,#2f7bff)}
+#ruah-m-siri i:nth-child(2){inset:7px;border-radius:46% 54% 52% 48%/50% 44% 56% 50%;background:conic-gradient(from 180deg,#00d4ff,#ff3d7f,#2f7bff,#ff5a1f,#00d4ff)}
+#ruah-m-siri i:nth-child(3){inset:3px;border-radius:56% 44% 47% 53%/47% 56% 44% 53%;background:conic-gradient(from 90deg,#8b5cf6,#ff5a1f,#00d4ff,#ff3d7f,#8b5cf6)}
+#ruah-m-btn:hover{transform:scale(1.05)}
+#ruah-m-cv{width:120px;height:120px;border-radius:50%;display:block;position:relative;background:radial-gradient(circle at 50% 40%,#2a2a2a,#111 70%);box-shadow:0 10px 30px rgba(0,0,0,.45),0 0 0 2px rgba(255,255,255,.18)}
+#ruah-m-ring{position:absolute;inset:-3px;border-radius:50%;border:3px solid #ff5a1f;opacity:0;pointer-events:none}
+@keyframes ruahPulse{0%{transform:scale(1);opacity:.9}100%{transform:scale(1.35);opacity:0}}
+#ruah-m-pill{display:flex;align-items:center;gap:8px;background:#111;color:#f5efe3;border:1px solid rgba(255,255,255,.12);padding:8px 14px;border-radius:999px;font-size:13px;line-height:1;box-shadow:0 6px 18px rgba(0,0,0,.35);white-space:nowrap;order:-1}
+#ruah-m-dot{width:8px;height:8px;border-radius:50%;background:#ff5a1f}
+#ruah-mascotte.speaking #ruah-m-dot,#ruah-mascotte.listening #ruah-m-dot{animation:ruahBlink 1s infinite}
+@keyframes ruahBlink{50%{opacity:.25}}
+#ruah-m-close{position:absolute;right:-6px;bottom:96px;width:22px;height:22px;border-radius:50%;border:0;background:#222;color:#fff;font-size:14px;line-height:22px;cursor:pointer;opacity:0;transition:opacity .2s}
+#ruah-mascotte:hover #ruah-m-close{opacity:1}
+@media (max-width:600px){#ruah-mascotte{right:14px;bottom:14px}#ruah-m-btn,#ruah-m-cv{width:92px;height:92px}#ruah-m-pill{font-size:12px}#ruah-m-close{bottom:72px;opacity:1}}
+</style>
+<script is:inline type="module">
+(() => {
+  if (window.__ruahMascotte) return; window.__ruahMascotte = true;
+  const AGENT_ID = "agent_0901m7mtrw35fbns35zjprj5x8nz";
+  const root = document.getElementById("ruah-mascotte");
+  const IMG_URL = root.dataset.img;
+  const cv = document.getElementById("ruah-m-cv"), ctx = cv.getContext("2d");
+  const txt = document.getElementById("ruah-m-txt");
+  const siri = document.getElementById("ruah-m-siri"), blobs = Array.from(siri.children);
+  let lvl = 0.15, ang = [0, 120, 240], last = performance.now();
+  const JAW = { cx: 266, cy: 315, rx: 61, ry: 34 }, MOUTH = { x1: 232, x2: 300, y: 279 };
+  const CROP = { x: 125, y: 70, s: 290 };
+  const W = 500, H = 454;
+  const img = new Image(); img.src = IMG_URL;
+  const full = document.createElement("canvas"); full.width = W; full.height = H; const f = full.getContext("2d");
+  const jawC = document.createElement("canvas"); jawC.width = W; jawC.height = H; const j = jawC.getContext("2d");
+  const mask = document.createElement("canvas"); mask.width = W; mask.height = H; const mk = mask.getContext("2d");
+  mk.filter = "blur(5px)"; mk.fillStyle = "#fff";
+  mk.beginPath(); mk.ellipse(JAW.cx, JAW.cy, JAW.rx, JAW.ry, 0, 0, Math.PI * 2); mk.fill();
+  mk.filter = "none"; mk.globalCompositeOperation = "destination-out"; mk.fillRect(0, 0, W, JAW.cy - JAW.ry + 4);
+
+  let conv = null, mode = "idle", open = 0, t0 = performance.now();
+  const setState = (s, label) => { root.classList.remove("idle", "connecting", "listening", "speaking"); root.classList.add(s); if (label) txt.textContent = label; };
+
+  function draw(now) {
+    const t = (now - t0) / 1000;
+    const dt = Math.min(0.05, (now - last) / 1000); last = now;
+    let target = 0, vin = 0;
+    if (mode === "listening") { try { vin = conv ? conv.getInputVolume() : 0; } catch (e) {} }
+    if (mode === "speaking") {
+      let v = 0; try { v = conv ? conv.getOutputVolume() : 0; } catch (e) {}
+      target = v > 0.01 ? Math.min(9, v * 45) : 4 + 4 * Math.abs(Math.sin(t * 9)) * Math.abs(Math.sin(t * 3.7));
+    }
+    open += (target - open) * 0.45;
+    const lt = mode === "speaking" ? Math.min(1, 0.4 + open / 10) : mode === "listening" ? Math.min(1, 0.28 + vin * 3) : root.classList.contains("connecting") ? 0.45 + 0.2 * Math.sin(t * 6) : 0.15 + 0.06 * Math.sin(t * 1.8);
+    lvl += (lt - lvl) * 0.15;
+    siri.style.setProperty("--l", lvl.toFixed(3));
+    for (let k = 0; k < 3; k++) { ang[k] += dt * (k % 2 ? -1 : 1) * (35 + k * 22 + lvl * 280); blobs[k].style.transform = "rotate(" + ang[k].toFixed(1) + "deg)"; }
+    const d = open < 0.3 ? 0 : open;
+    f.clearRect(0, 0, W, H); f.drawImage(img, 0, 0, W, H);
+    if (d > 0) {
+      f.fillStyle = "#4b161c";
+      f.beginPath(); f.ellipse((MOUTH.x1 + MOUTH.x2) / 2, MOUTH.y + 3 + d * 0.85, (MOUTH.x2 - MOUTH.x1) / 2, 3 + d * 0.85, 0, 0, Math.PI * 2); f.fill();
+      j.globalCompositeOperation = "source-over"; j.clearRect(0, 0, W, H); j.drawImage(img, 0, d, W, H);
+      j.globalCompositeOperation = "destination-in"; j.drawImage(mask, 0, d);
+      f.drawImage(jawC, 0, 0);
+    }
+    const breathe = Math.sin(t * 1.8) * 0.012, nod = mode === "speaking" ? d * 0.0025 * Math.sin(t * 6) : 0;
+    ctx.clearRect(0, 0, cv.width, cv.height);
+    ctx.save();
+    ctx.translate(cv.width / 2, cv.height);
+    ctx.rotate(Math.sin(t * 0.9) * 0.02 + nod);
+    ctx.scale(1 + breathe, 1 + breathe);
+    ctx.translate(-cv.width / 2, -cv.height);
+    ctx.drawImage(full, CROP.x, CROP.y, CROP.s, CROP.s, 0, 6, cv.width, cv.height);
+    ctx.restore();
+    requestAnimationFrame(draw);
+  }
+  img.onload = () => requestAnimationFrame(draw);
+
+  const norm = (p) => { try { p = new URL(p, location.origin).pathname; } catch (e) {} p = p.replace(/\/+$/, ""); return p || "/"; };
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+  async function waitPath(p, ms) { const t = Date.now(); while (Date.now() - t < (ms || 5000)) { if (norm(location.pathname) === p) return true; await sleep(100); } return false; }
+  function scrollToSection(q) {
+    q = String(q || "").toLowerCase().trim();
+    if (!q) return false;
+    const byId = document.getElementById(q);
+    if (byId && !root.contains(byId)) { byId.scrollIntoView({ behavior: "smooth", block: "start" }); return true; }
+    const els = Array.from(document.querySelectorAll("h1,h2,h3,h4,h5,h6,p")).filter((e) => !root.contains(e) && e.getClientRects().length);
+    const tx = (e) => e.textContent.replace(/\s+/g, " ").trim().toLowerCase();
+    const hit = els.find((e) => tx(e) === q) || els.find((e) => tx(e).indexOf(q) === 0 && tx(e).length < 80) || els.find((e) => tx(e).indexOf(q) >= 0 && tx(e).length < 80);
+    if (!hit) return false;
+    window.scrollTo({ top: hit.getBoundingClientRect().top + window.scrollY - 90, behavior: "smooth" });
+    return true;
+  }
+  function findLink(p) {
+    return Array.from(document.querySelectorAll("a[href]")).find((a) => {
+      if (root.contains(a)) return false;
+      try { const u = new URL(a.href, location.href); return u.origin === location.origin && norm(u.pathname) === p; } catch (e) { return false; }
+    });
+  }
+  async function openPath(p) {
+    if (norm(location.pathname) === p) return true;
+    let a = findLink(p);
+    if (!a && p.indexOf("/work/") === 0) {
+      const w = findLink("/work");
+      if (w) { w.click(); await waitPath("/work"); await sleep(900); a = findLink(p); }
+    }
+    if (a) a.click();
+    else { const t = document.createElement("a"); t.href = p; t.style.display = "none"; document.body.appendChild(t); t.click(); t.remove(); }
+    const ok = await waitPath(p);
+    await sleep(700);
+    return ok;
+  }
+  async function guide(params) {
+    const p = norm((params && params.page) || "/");
+    const section = params && params.section;
+    setState(mode === "speaking" ? "speaking" : "listening", "Je vous emmène…");
+    const ok = await openPath(p);
+    if (!ok) return "La page " + p + " n'a pas pu s'ouvrir. Propose au visiteur de cliquer lui-même dans le menu.";
+    if (!section) { window.scrollTo({ top: 0, behavior: "smooth" }); return "La page " + p + " est maintenant affichée à l'écran du visiteur."; }
+    return scrollToSection(section)
+      ? "La page " + p + " est affichée, section « " + section + " » à l'écran."
+      : "La page " + p + " est affichée (section « " + section + " » introuvable, haut de page).";
+  }
+  let token = 0;
+  async function start() {
+    const my = ++token;
+    setState("connecting", "Connexion…");
+    try {
+      const st = await navigator.mediaDevices.getUserMedia({ audio: true }); st.getTracks().forEach(tr => tr.stop());
+      const { Conversation } = await import("https://esm.sh/@elevenlabs/client");
+      const c = await Conversation.startSession({
+        agentId: AGENT_ID,
+        connectionType: "webrtc",
+        clientTools: { montrer_sur_le_site: (params) => guide(params) },
+        onConnect: () => { if (my !== token) return; mode = "listening"; setState("listening", "Je vous écoute…"); },
+        onModeChange: ({ mode: m }) => {
+          if (my !== token) return;
+          mode = m === "speaking" ? "speaking" : "listening";
+          setState(mode, mode === "speaking" ? "Je vous réponds…" : "Je vous écoute…");
+        },
+        onDisconnect: () => { if (my === token) stopUI(); },
+        onError: () => { if (my === token) stopUI("Oups, réessayez dans un instant"); }
+      });
+      if (my !== token) { try { await c.endSession(); } catch (e) {} return; }
+      conv = c;
+    } catch (e) {
+      if (my === token) stopUI(e && e.name === "NotAllowedError" ? "Autorisez le micro pour me parler" : "Oups, réessayez dans un instant");
+    }
+  }
+  function stopUI(label) { conv = null; mode = "idle"; setState("idle", label || "Une question ? Parlez-moi"); }
+  async function stop() { token++; const c = conv; stopUI(); try { await c?.endSession(); } catch (e) {} }
+
+  document.getElementById("ruah-m-btn").addEventListener("click", () => { (conv || root.classList.contains("connecting") || root.classList.contains("listening")) ? stop() : start(); });
+  document.getElementById("ruah-m-close").addEventListener("click", (e) => { e.stopPropagation(); stop(); root.classList.add("ruah-hidden"); });
+  setState("idle");
+})();
+</script>

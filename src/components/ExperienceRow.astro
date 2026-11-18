@@ -1,0 +1,24 @@
+---
+interface Props { period: string; role: string; company: string }
+const { period, role, company } = Astro.props
+---
+<div class="er">
+    <p class="t-label accent per">{period}</p>
+    <div class="rw"><h3 class="t-h2 role">{role}</h3></div>
+    <p class="t-label comp">{company}</p>
+</div>
+<style>
+    .er { display: flex; align-items: center; gap: 32px; padding: 28px 0; border-top: 1px solid var(--line); }
+    .per { width: 180px; flex-shrink: 0; }
+    .rw { flex: 1 1 0; min-width: 0; transition: padding .4s var(--ease); }
+    .role, .comp { transition: color .4s var(--ease); }
+    @media (hover: hover) {
+        .er:hover .rw { padding-left: 24px; }
+        .er:hover .role { color: var(--accent); }
+        .er:hover .comp { color: var(--high); }
+    }
+    @media (max-width: 809.98px) {
+        .er { flex-direction: column; align-items: flex-start; gap: 8px; }
+        .per, .rw { width: 100%; }
+    }
+</style>
