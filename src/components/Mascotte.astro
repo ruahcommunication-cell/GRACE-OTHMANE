@@ -12,7 +12,7 @@ const img = fx("gzm1PzlIY3gBhQJzjlUplDkB3IM.png")
   <button id="ruah-m-close" type="button" aria-label="Masquer l'assistant">×</button>
 </div>
 <style is:global>
-#ruah-mascotte{position:fixed;right:24px;bottom:24px;z-index:9999;display:flex;flex-direction:column;align-items:flex-end;gap:10px;font-family:Switzer,Inter,system-ui,sans-serif}
+#ruah-mascotte{position:fixed;right:24px;bottom:84px;z-index:9999;display:flex;flex-direction:column;align-items:flex-end;gap:10px;font-family:Switzer,Inter,system-ui,sans-serif}
 #ruah-mascotte.ruah-hidden{display:none}
 #ruah-m-btn{position:relative;width:120px;height:120px;border-radius:50%;border:0;padding:0;cursor:pointer;background:transparent;box-shadow:none;overflow:visible;transform:scale(1);transition:transform .25s ease}
 #ruah-m-siri{position:absolute;inset:-20px;border-radius:50%;pointer-events:none;z-index:-1;--l:.15;transform:scale(calc(.9 + var(--l) * .32));opacity:calc(.6 + var(--l) * .4)}
@@ -30,7 +30,7 @@ const img = fx("gzm1PzlIY3gBhQJzjlUplDkB3IM.png")
 @keyframes ruahBlink{50%{opacity:.25}}
 #ruah-m-close{position:absolute;right:-6px;bottom:96px;width:22px;height:22px;border-radius:50%;border:0;background:#222;color:#fff;font-size:14px;line-height:22px;cursor:pointer;opacity:0;transition:opacity .2s}
 #ruah-mascotte:hover #ruah-m-close{opacity:1}
-@media (max-width:600px){#ruah-mascotte{right:14px;bottom:14px}#ruah-m-btn,#ruah-m-cv{width:92px;height:92px}#ruah-m-pill{font-size:12px}#ruah-m-close{bottom:72px;opacity:1}}
+@media (max-width:600px){#ruah-mascotte{right:14px;bottom:76px}#ruah-m-btn,#ruah-m-cv{width:92px;height:92px}#ruah-m-pill{font-size:12px}#ruah-m-close{bottom:72px;opacity:1}}
 </style>
 <script is:inline type="module">
 (() => {
