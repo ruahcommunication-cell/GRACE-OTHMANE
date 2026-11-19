@@ -1,0 +1,38 @@
+{
+  "intro": "Trois packs clairs pour donner à votre marque une identité qui marque les esprits. Les prix sont indiqués « à partir de » : chaque projet fait l’objet d’un devis personnalisé.",
+  "packs": [
+    {
+      "name": "Essentiel",
+      "price": "690 €",
+      "tagline": "Pour lancer sa marque proprement",
+      "delay": "Environ 2 semaines",
+      "featured": false,
+      "items": ["Logo : 2 pistes créatives", "2 séries de retouches", "Déclinaisons couleur, noir et blanc", "Palette de couleurs et typographies", "Fichiers prêts à l’emploi (web et impression)"]
+    },
+    {
+      "name": "Identité",
+      "price": "1 490 €",
+      "tagline": "Une marque cohérente partout",
+      "delay": "3 à 4 semaines",
+      "featured": true,
+      "items": ["Tout le pack Essentiel", "Charte graphique (guide PDF)", "Cartes de visite", "Kit réseaux sociaux : photo de profil et 3 modèles de posts", "Mises en situation (mockups)"]
+    },
+    {
+      "name": "Signature",
+      "price": "2 490 €",
+      "tagline": "Une marque qui marque les esprits",
+      "delay": "4 à 6 semaines",
+      "featured": false,
+      "items": ["Tout le pack Identité", "Au choix : mascotte personnalisée ou animation du logo", "Un support en plus : menu, packaging, enseigne ou flyer", "3 séries de retouches"]
+    }
+  ],
+  "options": [
+    { "name": "Animation du logo (5 à 10 s)", "price": "250 €" },
+    { "name": "Création de mascotte", "price": "dès 450 €" },
+    { "name": "Menu de restaurant", "price": "dès 250 €" },
+    { "name": "Flyer ou affiche", "price": "dès 150 €" },
+    { "name": "Série de retouches supplémentaire", "price": "60 €" },
+    { "name": "Visuels réseaux sociaux (8 par mois)", "price": "390 € / mois" }
+  ],
+  "conditions": ["Acompte de 40 % à la signature du devis, solde à la livraison", "Nombre de retouches défini dans chaque pack", "Fichiers sources et droits d’utilisation remis après le paiement complet", "Devis gratuit, valable 30 jours"]
+}

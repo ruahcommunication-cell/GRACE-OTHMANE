@@ -101,3 +101,27 @@ collections:
         file: src/content/settings.json
         fields:
           - { name: cv, label: "Fichier PDF du CV", widget: file }
+      - name: tarifs
+        label: Tarifs
+        file: src/content/tarifs.json
+        fields:
+          - { name: intro, label: "Texte d’introduction", widget: text }
+          - name: packs
+            label: Packs
+            widget: list
+            summary: "{{fields.name}} — {{fields.price}}"
+            fields:
+              - { name: name, label: Nom }
+              - { name: price, label: "Prix (ex. 1 490 €)" }
+              - { name: tagline, label: "Phrase d’accroche" }
+              - { name: delay, label: Délai }
+              - { name: featured, label: "Mettre en avant", widget: boolean, required: false }
+              - { name: items, label: "Ce qui est inclus", widget: list, field: { name: item, label: Élément } }
+          - name: options
+            label: "Options à la carte"
+            widget: list
+            summary: "{{fields.name}} — {{fields.price}}"
+            fields:
+              - { name: name, label: Option }
+              - { name: price, label: Prix }
+          - { name: conditions, label: Conditions, widget: list, field: { name: item, label: Condition } }

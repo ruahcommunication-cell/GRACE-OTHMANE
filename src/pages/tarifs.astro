@@ -1,0 +1,95 @@
+---
+import Site from "../layouts/Site.astro"
+import SplitTitle from "../components/SplitTitle.astro"
+import data from "../content/tarifs.json"
+---
+<Site title="Tarifs — Grace Othmane | ruah studio" description="Les tarifs de ruah studio : packs Essentiel, Identité et Signature pour créer le logo et l’identité visuelle de votre marque, et options à la carte.">
+    <header class="thd w">
+        <div class="r1"><p class="t-label">// Tarifs</p><p class="t-label accent">Devis gratuit</p></div>
+        <SplitTitle text="Les packs" class="big" y={60} blur={12} dur={1} step={0.03} delay={0.1} />
+        <div class="r2"><p class="t-lead lede">{data.intro}</p></div>
+    </header>
+
+    <section class="packs w">
+        {data.packs.map((p, i) => (
+            <article class:list={["pack", { featured: p.featured }]} data-appear>
+                <div class="top">
+                    <p class="t-label accent">0{i + 1}</p>
+                    {p.featured && <p class="t-label badge">Le plus choisi</p>}
+                </div>
+                <h2 class="t-h2 name">{p.name}</h2>
+                <p class="t-label c-mid">{p.tagline}</p>
+                <div class="price"><span class="t-label c-mid">À partir de</span><span class="amount">{p.price}</span></div>
+                <ul class="items">
+                    {p.items.map((it) => <li class="t-body c-high">{it}</li>)}
+                </ul>
+                <p class="t-label c-mid delay">Délai : {p.delay}</p>
+                <a href="/contact" class:list={["cta", "t-label", { solid: p.featured }]}>Demander un devis ↗</a>
+            </article>
+        ))}
+    </section>
+
+    <section class="more w">
+        <div class="col">
+            <p class="t-label accent">// Options à la carte</p>
+            <div class="opts">
+                {data.options.map((o) => <div class="opt"><span class="t-body c-high">{o.name}</span><span class="t-value">{o.price}</span></div>)}
+            </div>
+        </div>
+        <div class="col">
+            <p class="t-label accent">// Comment ça marche</p>
+            <div class="conds">
+                {data.conditions.map((c, i) => <div class="cond"><p class="t-label accent">0{i + 1}</p><p class="t-body c-high">{c}</p></div>)}
+            </div>
+            <a href="/contact" class="cta solid t-label big-cta">Parler de mon projet ↗</a>
+        </div>
+    </section>
+</Site>
+
+<style>
+    .w { width: 100%; max-width: 1600px; margin: 0 auto; padding-left: 40px; padding-right: 40px; }
+    .thd { padding-top: 72px; padding-bottom: 56px; display: flex; flex-direction: column; gap: 36px; overflow: clip; }
+    .r1 { display: flex; justify-content: space-between; align-items: center; }
+    .thd :global(.big) { width: 100%; font-family: var(--f-display); font-variation-settings: "opsz" 72; font-size: 240px; font-weight: 900; letter-spacing: -0.01em; line-height: 0.84em; text-transform: uppercase; color: var(--high); }
+    .r2 { border-top: 1px solid var(--line); padding-top: 24px; }
+    .lede { max-width: 640px; }
+    .packs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; padding-bottom: 120px; align-items: stretch; }
+    .pack { position: relative; display: flex; flex-direction: column; gap: 16px; padding: 32px; border: 1px solid var(--line-strong); background: var(--surface); }
+    .pack.featured { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), 0 30px 80px -40px var(--accent); }
+    .top { display: flex; justify-content: space-between; align-items: center; }
+    .badge { padding: 6px 10px; background: var(--accent); color: var(--on-accent); }
+    .name { color: var(--high); margin-top: 8px; }
+    .price { display: flex; flex-direction: column; gap: 6px; padding: 20px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin-top: 8px; }
+    .amount { font-family: var(--f-display); font-variation-settings: "opsz" 72; font-size: 72px; font-weight: 900; line-height: 0.9em; color: var(--high); }
+    .items { list-style: none; display: flex; flex-direction: column; gap: 12px; flex: 1; padding: 8px 0; }
+    .items li { position: relative; padding-left: 22px; }
+    .items li::before { content: ""; position: absolute; left: 0; top: 0.6em; width: 8px; height: 8px; background: var(--accent); }
+    .cta { display: flex; justify-content: center; align-items: center; height: 56px; border: 1px solid var(--line-strong); color: var(--high); transition: background .2s, color .2s, border-color .2s; }
+    .cta:hover { border-color: var(--accent); color: var(--accent); }
+    .cta.solid { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+    .cta.solid:hover { filter: brightness(1.1); color: var(--on-accent); }
+    .more { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 48px; padding-top: 72px; padding-bottom: 160px; border-top: 1px solid var(--line); }
+    .col { display: flex; flex-direction: column; gap: 24px; }
+    .opts, .conds { display: flex; flex-direction: column; }
+    .opt { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 18px 0; border-top: 1px solid var(--line); }
+    .opt:last-child, .cond:last-child { border-bottom: 1px solid var(--line); }
+    .opt .t-value { white-space: nowrap; color: var(--high); }
+    .cond { display: flex; gap: 20px; align-items: center; padding: 18px 0; border-top: 1px solid var(--line); }
+    .big-cta { margin-top: 16px; }
+    @media (max-width: 1199.98px) {
+        .w { padding-left: 24px; padding-right: 24px; }
+        .thd :global(.big) { font-size: 150px; }
+        .packs { grid-template-columns: 1fr; max-width: 640px; }
+        .amount { font-size: 60px; }
+        .more { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 809.98px) {
+        .w { padding-left: 20px; padding-right: 20px; }
+        .thd { padding-top: 48px; padding-bottom: 40px; }
+        .r1 { flex-direction: column; align-items: flex-start; gap: 8px; }
+        .thd :global(.big) { font-size: 88px; }
+        .pack { padding: 24px; }
+        .packs { padding-bottom: 88px; }
+        .more { padding-top: 48px; padding-bottom: 120px; }
+    }
+</style>
